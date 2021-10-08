@@ -6,8 +6,12 @@ import styles from '../styles/Home.module.css';
 import { Box, Container, Text, Button } from '@chakra-ui/react';
 import AddPlayer from '../components/AddPlayer';
 
-const Home: NextPage = () => {
-    return <div></div>;
+const Players: NextPage = () => {
+    return (
+        <div>
+            <h1>Players</h1>
+        </div>
+    );
 };
 
-export default Home;
+export default Players;
