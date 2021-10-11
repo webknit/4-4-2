@@ -4,7 +4,7 @@ const Header = () => {
     return (
         <div>
             <Box bg="#2e8540" w="100%" p={4}>
-                <Container maxW="container.md">
+                <Container maxW="container.lg">
                     <Text color="white">Four Four Two</Text>
                 </Container>
             </Box>

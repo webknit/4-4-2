@@ -9,7 +9,7 @@ function MyApp({ Component, pageProps }: AppProps) {
     return (
         <ChakraProvider>
             <Header></Header>
-            <Container maxW="container.md">
+            <Container maxW="container.lg">
                 <main>
                     <Component {...pageProps} />
                 </main>
