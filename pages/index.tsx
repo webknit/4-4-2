@@ -22,7 +22,7 @@ import { collection, Firestore, getDocs } from 'firebase/firestore/lite';
 
 const Home: NextPage = () => {
     return (
-        <Grid templateColumns="1fr 1fr" gap={4}>
+        <Grid templateColumns="1fr 1fr" gap={4} my={4}>
             <Box>Pitch</Box>
             <Box>
                 <Players />

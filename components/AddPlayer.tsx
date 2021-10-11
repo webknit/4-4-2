@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import {
     Input,
     Stack,
@@ -15,7 +15,8 @@ import {
     ModalContent,
     ModalOverlay,
     Modal,
-    useDisclosure
+    FormErrorMessage,
+    useToast
 } from '@chakra-ui/react';
 
 import { collection, addDoc } from 'firebase/firestore/lite';
@@ -34,14 +35,23 @@ interface Player {
 }
 
 const AddPlayer: React.FC<IProps> = ({ isOpen, onClose }) => {
+    const toast = useToast();
+
     const [player, addPlayer] = useState<Player>({
         name: null,
         position: [],
         country: null
     });
 
+    const [positionSelected, setPositionSelected] = useState<boolean | null>(null);
+
+    const firstRender = useRef(true);
+
+    useEffect(() => {
+        firstRender.current = false;
+    }, []);
+
     const addPosition = (e: React.ChangeEvent<HTMLInputElement>) => {
-        console.log(player);
         if (!player?.position.includes(e.target.value)) {
             console.log(e.target.value);
             addPlayer({
@@ -74,8 +84,21 @@ const AddPlayer: React.FC<IProps> = ({ isOpen, onClose }) => {
     const submitPlayer = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
+        if (!player!.position!.length) {
+            setPositionSelected(false);
+            return;
+        }
+
         const docRef = await addDoc(collection(db, '4-4-2_players'), player);
-        console.log('Document written with ID: ', docRef.id);
+
+        toast({
+            title: 'Player added',
+            description: `ID: {docRef}`,
+            status: 'success',
+            duration: 9000,
+            isClosable: true
+        });
+        //console.log('Document written with ID: ', docRef.id);
     };
 
     return (
@@ -87,11 +110,13 @@ const AddPlayer: React.FC<IProps> = ({ isOpen, onClose }) => {
                 <ModalBody>
                     <form onSubmit={submitPlayer}>
                         <Stack spacing={3}>
-                            <FormControl id="name">
+                            <FormControl id="name" isRequired>
                                 <FormLabel>Name</FormLabel>
                                 <Input type="text" onChange={changeName} />
                             </FormControl>
-                            <FormControl as="fieldset">
+                            <FormControl
+                                as="fieldset"
+                                isInvalid={positionSelected === false && positionSelected !== null}>
                                 <FormLabel as="legend">Position</FormLabel>
                                 <Flex flexWrap="wrap" spacing="24px">
                                     <Checkbox value="gk" mr={4} onChange={addPosition}>
@@ -119,13 +144,14 @@ const AddPlayer: React.FC<IProps> = ({ isOpen, onClose }) => {
                                         Forward
                                     </Checkbox>
                                 </Flex>
+                                <FormErrorMessage>You must select a position</FormErrorMessage>
                             </FormControl>
                             <FormControl id="position">
                                 <FormLabel>Country</FormLabel>
-                                <Select placeholder="Select country" onChange={changeCountry}>
-                                    <option value="England">England</option>
-                                    <option value="Spain">Spain</option>
-                                    <option value="Germany">Germany</option>
+                                <Select placeholder="Select country" onChange={changeCountry} isRequired>
+                                    <option value="">Select country</option>
+                                    <option value="Spain">England</option>
+                                    <option value="Germany">Spain</option>
                                 </Select>
                             </FormControl>
                         </Stack>

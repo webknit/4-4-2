@@ -1,21 +1,23 @@
 import { useState, useRef } from 'react';
 import {
-    Input,
-    Stack,
+    Flex,
+    Box,
     FormLabel,
     FormControl,
     Select,
     Button,
-    Flex,
-    Checkbox,
-    ModalFooter,
-    ModalBody,
-    ModalHeader,
-    ModalCloseButton,
-    ModalContent,
-    ModalOverlay,
-    Modal,
-    useDisclosure
+    Table,
+    Thead,
+    Tbody,
+    Tfoot,
+    Tr,
+    Th,
+    Td,
+    TableCaption,
+    useDisclosure,
+    Heading,
+    Text,
+    Spacer
 } from '@chakra-ui/react';
 
 import { collection, addDoc } from 'firebase/firestore/lite';
@@ -28,28 +30,59 @@ const Players: React.FC = () => {
 
     return (
         <div>
-            <h2>Players</h2>
+            <Flex align="center" borderBottom="1px" borderColor="gray.200" pb={4} mb={4}>
+                <Heading as="h2" size="xl" mb={0}>
+                    Players
+                </Heading>
+                <Spacer />
+                <Button onClick={onOpen} colorScheme="pink" size="sm">
+                    Add a new player
+                </Button>
+            </Flex>
 
-            <Button onClick={onOpen} colorScheme="blue">
-                Add a new player
-            </Button>
+            <Box mb={4}>
+                <FormControl id="position">
+                    <FormLabel>Position</FormLabel>
+                    <Select>
+                        <option value="England" selected>
+                            All
+                        </option>
+                        <option value="Spain">Goalkeeper</option>
+                        <option value="Germany">Left Back</option>
+                        <option value="Germany">Right Back</option>
+                        <option value="Germany">Center Back</option>
+                        <option value="Germany">Left Midfield</option>
+                        <option value="Germany">Right Midfield</option>
+                        <option value="Germany">Center Midfield</option>
+                        <option value="Germany">Forward</option>
+                    </Select>
+                </FormControl>
+            </Box>
 
-            <FormControl id="position">
-                <FormLabel>Position</FormLabel>
-                <Select>
-                    <option value="England" selected>
-                        All
-                    </option>
-                    <option value="Spain">Goalkeeper</option>
-                    <option value="Germany">Left Back</option>
-                    <option value="Germany">Right Back</option>
-                    <option value="Germany">Center Back</option>
-                    <option value="Germany">Left Midfield</option>
-                    <option value="Germany">Right Midfield</option>
-                    <option value="Germany">Center Midfield</option>
-                    <option value="Germany">Forward</option>
-                </Select>
-            </FormControl>
+            <Table variant="simple">
+                <Thead>
+                    <Tr>
+                        <Th>Name</Th>
+                        <Th>Position</Th>
+                        <Th>Country</Th>
+                        <Th>Picks</Th>
+                        <Th></Th>
+                    </Tr>
+                </Thead>
+                <Tbody>
+                    <Tr>
+                        <Td>Ronaldo</Td>
+                        <Td>ST</Td>
+                        <Td>Portugal</Td>
+                        <Td isNumeric>23</Td>
+                        <Td>
+                            <Button colorScheme="pink" size="sm">
+                                Select
+                            </Button>
+                        </Td>
+                    </Tr>
+                </Tbody>
+            </Table>
 
             <AddPlayer isOpen={isOpen} onClose={onClose} />
         </div>
