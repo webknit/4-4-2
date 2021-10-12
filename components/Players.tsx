@@ -1,4 +1,5 @@
 import { useState, useRef } from 'react';
+import Image from 'next/image';
 import {
     Flex,
     Box,
@@ -62,21 +63,24 @@ const Players: React.FC = () => {
             <Table variant="simple">
                 <Thead>
                     <Tr>
+                        <Th>Country</Th>
                         <Th>Name</Th>
                         <Th>Position</Th>
-                        <Th>Country</Th>
+
                         <Th>Picks</Th>
                         <Th></Th>
                     </Tr>
                 </Thead>
                 <Tbody>
                     <Tr>
+                        <Td>
+                            <Image src="/flags/us.svg" alt="Picture of the author" width={30} height={16} />
+                        </Td>
                         <Td>Ronaldo</Td>
                         <Td>ST</Td>
-                        <Td>Portugal</Td>
-                        <Td isNumeric>23</Td>
+                        <Td>23</Td>
                         <Td>
-                            <Button colorScheme="pink" size="sm">
+                            <Button colorScheme="pink" size="sm" variant="outline">
                                 Select
                             </Button>
                         </Td>

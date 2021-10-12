@@ -74,7 +74,7 @@ const AddPlayer: React.FC<IProps> = ({ isOpen, onClose }) => {
         });
     };
 
-    const changeCountry = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const changeCountry = (e: React.ChangeEvent<HTMLSelectElement>) => {
         addPlayer({
             ...player,
             country: e.target.value
@@ -89,7 +89,7 @@ const AddPlayer: React.FC<IProps> = ({ isOpen, onClose }) => {
             return;
         }
 
-        const docRef = await addDoc(collection(db, '4-4-2_players'), player);
+        const docRef = await addDoc(collection(db, 'four-four-two_players'), player);
 
         toast({
             title: 'Player added',
@@ -120,28 +120,28 @@ const AddPlayer: React.FC<IProps> = ({ isOpen, onClose }) => {
                                 <FormLabel as="legend">Position</FormLabel>
                                 <Flex flexWrap="wrap" spacing="24px">
                                     <Checkbox value="gk" mr={4} onChange={addPosition}>
-                                        Goalkeeper
+                                        GK
                                     </Checkbox>
                                     <Checkbox value="lb" mr={4} onChange={addPosition}>
-                                        Left back
+                                        LB
                                     </Checkbox>
                                     <Checkbox value="rb" mr={4} onChange={addPosition}>
-                                        Right back
+                                        RB
                                     </Checkbox>
                                     <Checkbox value="cb" mr={4} onChange={addPosition}>
-                                        Center back
+                                        CB
                                     </Checkbox>
                                     <Checkbox value="lm" mr={4} onChange={addPosition}>
-                                        Left midfield
+                                        LM
                                     </Checkbox>
                                     <Checkbox value="rm" mr={4} onChange={addPosition}>
-                                        Right midfield
+                                        RM
                                     </Checkbox>
                                     <Checkbox value="cm" mr={4} onChange={addPosition}>
-                                        Center midfield
+                                        CM
                                     </Checkbox>
                                     <Checkbox value="fr" mr={4} onChange={addPosition}>
-                                        Forward
+                                        ST
                                     </Checkbox>
                                 </Flex>
                                 <FormErrorMessage>You must select a position</FormErrorMessage>
@@ -150,14 +150,24 @@ const AddPlayer: React.FC<IProps> = ({ isOpen, onClose }) => {
                                 <FormLabel>Country</FormLabel>
                                 <Select placeholder="Select country" onChange={changeCountry} isRequired>
                                     <option value="">Select country</option>
-                                    <option value="Spain">England</option>
-                                    <option value="Germany">Spain</option>
+                                    <option value="ar">Argentina</option>
+                                    <option value="br">Brazil</option>
+                                    <option value="be">Belgium</option>
+                                    <option value="co">Columbia</option>
+                                    <option value="hr">Croatia</option>
+                                    <option value="gb-eng">England</option>
+                                    <option value="fr">France</option>
+                                    <option value="de">Germany</option>
+                                    <option value="it">Italy</option>
+                                    <option value="nl">Netherlands</option>
+                                    <option value="pt">Portugal</option>
+                                    <option value="es">Spain</option>
                                 </Select>
                             </FormControl>
                         </Stack>
 
-                        <Button colorScheme="blue" mt={4} type="submit">
-                            Button
+                        <Button colorScheme="pink" mt={4} type="submit">
+                            Add player
                         </Button>
                     </form>
                 </ModalBody>
