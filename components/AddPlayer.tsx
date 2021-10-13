@@ -23,15 +23,11 @@ import { collection, addDoc } from 'firebase/firestore/lite';
 
 import db from '../db/firebase';
 
+import { Player } from '../interfaces/player';
+
 interface IProps {
     isOpen: boolean;
     onClose: any;
-}
-
-interface Player {
-    name: string | null;
-    position: string[];
-    country: string | null;
 }
 
 const AddPlayer: React.FC<IProps> = ({ isOpen, onClose }) => {
@@ -93,11 +89,14 @@ const AddPlayer: React.FC<IProps> = ({ isOpen, onClose }) => {
 
         toast({
             title: 'Player added',
-            description: `ID: {docRef}`,
+            description: `ID: ${docRef}`,
             status: 'success',
             duration: 9000,
             isClosable: true
         });
+
+        onClose();
+
         //console.log('Document written with ID: ', docRef.id);
     };
 
@@ -141,7 +140,7 @@ const AddPlayer: React.FC<IProps> = ({ isOpen, onClose }) => {
                                         CM
                                     </Checkbox>
                                     <Checkbox value="fr" mr={4} onChange={addPosition}>
-                                        ST
+                                        FR
                                     </Checkbox>
                                 </Flex>
                                 <FormErrorMessage>You must select a position</FormErrorMessage>

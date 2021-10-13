@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import Image from 'next/image';
 import {
     Flex,
@@ -17,17 +17,48 @@ import {
     TableCaption,
     useDisclosure,
     Heading,
-    Text,
+    Skeleton,
     Spacer
 } from '@chakra-ui/react';
 
-import { collection, addDoc } from 'firebase/firestore/lite';
+import { collection, Firestore, getDocs } from 'firebase/firestore/lite';
 
 import db from '../db/firebase';
 import AddPlayer from './AddPlayer';
 
+import { Player } from '../interfaces/player';
+
 const Players: React.FC = () => {
     const { isOpen, onOpen, onClose } = useDisclosure();
+
+    const [players, setPlayers] = useState<Player[] | []>([]);
+    const [filteredPlayers, setFilteredPlayers] = useState<Player[] | []>([]);
+    const [loading, setLoading] = useState<boolean>(false);
+
+    const collectData = async () => {
+        setLoading(true);
+        const col = collection(db, 'four-four-two_players');
+        const playersSnapshot = await getDocs(col);
+        const playersList = playersSnapshot.docs.map((doc) => doc.data());
+        setLoading(false);
+        setPlayers(playersList);
+        setFilteredPlayers(playersList);
+    };
+
+    const filterPos = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setLoading(true);
+        console.log(players);
+        if (e.target.value !== 'all')
+            setFilteredPlayers(players.filter((item) => item.position.includes(e.target.value)));
+        else collectData();
+        setTimeout(() => {
+            setLoading(false);
+        }, 1000);
+    };
+
+    useEffect(() => {
+        collectData();
+    }, []);
 
     return (
         <div>
@@ -44,49 +75,67 @@ const Players: React.FC = () => {
             <Box mb={4}>
                 <FormControl id="position">
                     <FormLabel>Position</FormLabel>
-                    <Select>
-                        <option value="England" selected>
+                    <Select onChange={filterPos}>
+                        <option value="all" selected>
                             All
                         </option>
-                        <option value="Spain">Goalkeeper</option>
-                        <option value="Germany">Left Back</option>
-                        <option value="Germany">Right Back</option>
-                        <option value="Germany">Center Back</option>
-                        <option value="Germany">Left Midfield</option>
-                        <option value="Germany">Right Midfield</option>
-                        <option value="Germany">Center Midfield</option>
-                        <option value="Germany">Forward</option>
+                        <option value="gk">Goalkeeper</option>
+                        <option value="lb">Left Back</option>
+                        <option value="rb">Right Back</option>
+                        <option value="cb">Center Back</option>
+                        <option value="lm">Left Midfield</option>
+                        <option value="rm">Right Midfield</option>
+                        <option value="cm">Center Midfield</option>
+                        <option value="fr">Forward</option>
                     </Select>
                 </FormControl>
             </Box>
 
-            <Table variant="simple">
-                <Thead>
-                    <Tr>
-                        <Th>Country</Th>
-                        <Th>Name</Th>
-                        <Th>Position</Th>
+            <Skeleton isLoaded={!loading}>
+                {filteredPlayers.length ? (
+                    <Table variant="simple">
+                        <Thead>
+                            <Tr>
+                                <Th>Country</Th>
+                                <Th>Name</Th>
+                                <Th>Position</Th>
 
-                        <Th>Picks</Th>
-                        <Th></Th>
-                    </Tr>
-                </Thead>
-                <Tbody>
-                    <Tr>
-                        <Td>
-                            <Image src="/flags/us.svg" alt="Picture of the author" width={30} height={16} />
-                        </Td>
-                        <Td>Ronaldo</Td>
-                        <Td>ST</Td>
-                        <Td>23</Td>
-                        <Td>
-                            <Button colorScheme="pink" size="sm" variant="outline">
-                                Select
-                            </Button>
-                        </Td>
-                    </Tr>
-                </Tbody>
-            </Table>
+                                <Th>Picks</Th>
+                                <Th></Th>
+                            </Tr>
+                        </Thead>
+                        <Tbody>
+                            {filteredPlayers.map((player: Player, i) => (
+                                <Tr key={i}>
+                                    <Td>
+                                        <Image
+                                            src={`/flags/${player.country}.svg`}
+                                            alt="Picture of the author"
+                                            width={30}
+                                            height={16}
+                                        />
+                                    </Td>
+                                    <Td>{player.name}</Td>
+                                    <Td>
+                                        {player.position.map((pos, i) => {
+                                            let str = `${i > 0 ? `, ` : ``}${pos}`;
+                                            return `${str}`;
+                                        })}
+                                    </Td>
+                                    <Td>{player.picks || 0}</Td>
+                                    <Td>
+                                        <Button colorScheme="pink" size="sm" variant="outline">
+                                            Select
+                                        </Button>
+                                    </Td>
+                                </Tr>
+                            ))}
+                        </Tbody>
+                    </Table>
+                ) : (
+                    <Box>No players found</Box>
+                )}
+            </Skeleton>
 
             <AddPlayer isOpen={isOpen} onClose={onClose} />
         </div>
