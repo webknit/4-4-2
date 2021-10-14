@@ -36,7 +36,8 @@ const AddPlayer: React.FC<IProps> = ({ isOpen, onClose }) => {
     const [player, addPlayer] = useState<Player>({
         name: null,
         position: [],
-        country: null
+        country: null,
+        picks: 0
     });
 
     const [positionSelected, setPositionSelected] = useState<boolean | null>(null);
@@ -53,7 +54,8 @@ const AddPlayer: React.FC<IProps> = ({ isOpen, onClose }) => {
             addPlayer({
                 name: player!.name,
                 position: [...player!.position, e.target.value],
-                country: player!.country
+                country: player!.country,
+                picks: 0
             });
         } else {
             addPlayer({

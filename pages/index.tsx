@@ -5,6 +5,7 @@ import styles from '../styles/Home.module.css';
 
 import { Box, Grid, Center, Container, Text, Button } from '@chakra-ui/react';
 import Players from '../components/Players';
+import Pitch from '../components/Pitch';
 
 import db from '../db/firebase';
 import { collection, Firestore, getDocs } from 'firebase/firestore/lite';
@@ -23,7 +24,9 @@ import { collection, Firestore, getDocs } from 'firebase/firestore/lite';
 const Home: NextPage = () => {
     return (
         <Grid templateColumns="1fr 1fr" gap={4} my={4}>
-            <Box>Pitch</Box>
+            <Box>
+                <Pitch />
+            </Box>
             <Box>
                 <Players />
             </Box>

@@ -39,13 +39,13 @@ const Players: React.FC = () => {
         setLoading(true);
         const col = collection(db, 'four-four-two_players');
         const playersSnapshot = await getDocs(col);
-        const playersList = playersSnapshot.docs.map((doc) => doc.data());
+        const playersList = playersSnapshot.docs.map((doc) => doc.data() as Player);
         setLoading(false);
         setPlayers(playersList);
         setFilteredPlayers(playersList);
     };
 
-    const filterPos = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const filterPos = (e: React.ChangeEvent<HTMLSelectElement>) => {
         setLoading(true);
         console.log(players);
         if (e.target.value !== 'all')
